@@ -1,6 +1,6 @@
 package u02
 
-object Optionals extends App :
+object Optionals extends App : // questo si fa perchè estende un'applicazione eseguibile
 
   enum Option[A]:
     case Some(a: A)
