@@ -24,9 +24,9 @@ object Es7 extends App : // questo si fa perchè estende un'applicazione eseguib
       case Some(a) if pred(a) => opt
       case _ => None()
 
-    def map[A](opt: Option[A])(pred: A => Boolean): Option[Boolean] = opt match
-      case Some(a) if !pred(a) => Some(false)
-      case Some(a) => Some(true)
+    def map[A, O](opt: Option[A])(pred: A => /*Boolean*/O): Option[/*Boolean*/O] = opt match
+      /*case Some(a) if !pred(a) => Some(false)*/
+      case Some(a) => Some(pred(a))
       case _ => None()
 
     def map2[A,B](opt1: Option[A])(opt2: Option[B]): Option[(A,B)] = (opt1, opt2) match
