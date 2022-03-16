@@ -1,7 +1,7 @@
 package u02
 
 object Es5 extends App:
-  def fibonacci (n: Int): Int = n match
+  def fibonacci(n: Int): Int = n match
     case n if n < 0 => -1
     case n if n == 0 => 0
     case n if n == 1 => 1

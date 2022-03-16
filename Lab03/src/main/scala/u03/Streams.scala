@@ -1,5 +1,7 @@
 package u03
 
+//import u03.Streams.Stream.fibs
+
 object Streams extends App:
 
   import Lists.*
@@ -7,6 +9,8 @@ object Streams extends App:
   enum Stream[A]:
     private case Empty()
     private case Cons(head: () => A, tail: () => Stream[A])
+
+
 
   object Stream:
 
@@ -37,11 +41,24 @@ object Streams extends App:
     def iterate[A](init: => A)(next: A => A): Stream[A] =
       cons(init, iterate(next(init))(next))
 
-  // TODO: def drop(....)
+    def drop[A](stream: Stream[A])(n: Int): Stream[A] = (stream, n) match
+      case (Cons(head, tail), n) if n > 0 => drop(tail())(n - 1)
+      case (Cons(head, tail), n) => cons(head(), tail())
+      case _ => Empty()
+
+    def constant[A](x: A): Stream[A] =
+      cons(x, constant(x))
+
+    val fibs: Stream[Int] =
+      def _fib(x: Int, y: Int): Stream[Int] =
+        Stream.cons(x, _fib(y, x+y))
+      _fib(0,1)
+
   end Stream
 
   // var simplifies chaining of functions a bit..
   var str = Stream.iterate(0)(_ + 1) // {0,1,2,3,..}
+  val s = Stream.take(Stream.iterate(0)(_+1))(10)
   str = Stream.map(str)(_ + 1) // {1,2,3,4,..}
   str = Stream.filter(str)(x => (x < 3 || x > 20)) // {1,2,21,22,..}
   str = Stream.take(str)(10) // {1,2,21,22,..,28}
@@ -49,3 +66,5 @@ object Streams extends App:
 
   val corec: Stream[Int] = Stream.cons(1, corec) // {1,1,1,..}
   println(Stream.toList(Stream.take(corec)(10))) // [1,1,..,1]
+
+
