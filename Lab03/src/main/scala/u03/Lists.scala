@@ -2,7 +2,6 @@ package u03
 
 import u02.Modules.Person
 
-import java.util.concurrent.locks.Condition
 import scala.annotation.tailrec
 import u02.Optionals.Option.*
 import u02.Optionals.*
@@ -65,9 +64,7 @@ object Lists extends App:
       flatMap(filter(l)(c => c.isInstanceOf[Teacher]))(c => Cons(c.asInstanceOf[Teacher].course, Nil()))
 
     def foldLeft[A,B](l: List[A])(x: B)(f: (B, A) => B): B = l  match
-      case Cons(h, t) =>
-        val a = f(x,h)
-        foldLeft(t)(a)(f)
+      case Cons(h, t) => foldLeft(t)(f(x,h))(f)
       case _ => x
 
     def foldRight[A,B](l: List[A])(x: B)(f: (A, B) => B): B = l match
