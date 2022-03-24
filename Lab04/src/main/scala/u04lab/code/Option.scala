@@ -17,3 +17,4 @@ object Option:
   def flatMap[A, B](opt: Option[A])(f: A => Option[B]): Option[B] = opt match
     case Some(a) => f(a)
     case _ => None()
+
