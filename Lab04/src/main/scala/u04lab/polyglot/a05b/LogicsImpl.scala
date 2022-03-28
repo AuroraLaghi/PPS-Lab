@@ -10,20 +10,19 @@ class LogicsImpl(private val size: Int) extends Logics:
 
   private var _tickCount = 0
   private final var _gridSize = size
-  val random = Random()
-  var initial = (random.nextInt(_gridSize-2) + 1, random.nextInt(_gridSize-2)+1)
+  private val random = Random()
+  private var _initial = (random.nextInt(_gridSize-2) + 1, random.nextInt(_gridSize-2)+1)
 
-  override def tick(): Unit = {
+  override def tick(): Unit =
     this._tickCount = this._tickCount+1
-  }
 
   override def isOver: Boolean =
-    initial._2 - _tickCount < 0 || initial._2 + _tickCount >= this._gridSize ||
-    initial._1 - _tickCount < 0 || initial._1 + _tickCount >= this._gridSize
+    _initial._2 - _tickCount < 0 || _initial._2 + _tickCount >= this._gridSize ||
+    _initial._1 - _tickCount < 0 || _initial._1 + _tickCount >= this._gridSize
 
 
   override def hasElement(x: Int, y: Int): Boolean =
-    (x == initial._1 && Math.abs(y - initial._2) <= _tickCount) ||
-    (y == initial._2 && Math.abs(x - initial._1) <= _tickCount) ||
-    (x-y == initial._1 - initial._2 && Math.abs(x - initial._1) <= _tickCount) ||
-    (x+y == initial._1 + initial._2 && Math.abs(x - initial._1) <= _tickCount)
+    (x == _initial._1 && Math.abs(y - _initial._2) <= _tickCount) ||
+    (y == _initial._2 && Math.abs(x - _initial._1) <= _tickCount) ||
+    (x-y == _initial._1 - _initial._2 && Math.abs(x - _initial._1) <= _tickCount) ||
+    (x+y == _initial._1 + _initial._2 && Math.abs(x - _initial._1) <= _tickCount)
