@@ -12,13 +12,13 @@ class ListTest {
   /** todo */
   @Test
   def testZipRight(): Unit =
+    assertEquals(List((1, 0), (2, 1), (3, 2), (4, 3)), list.zipRight)
     assertEquals(List((1, 0), (2, 1), (3, 2), (4, 3)), list.zipRight1)
-    assertEquals(List((1, 0), (2, 1), (3, 2), (4, 3)), list.zipRight2)
 
   @Test
   def testPartition(): Unit =
+    assertEquals((List(2, 4), List(1, 3)), list.partition(_ % 2 == 0))
     assertEquals((List(2, 4), List(1, 3)), list.partition1(_ % 2 == 0))
-    assertEquals((List(2, 4), List(1, 3)), list.partition2(_ % 2 == 0))
 
   @Test
   def testSpan(): Unit =
