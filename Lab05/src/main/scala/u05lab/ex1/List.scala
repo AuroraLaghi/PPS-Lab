@@ -59,16 +59,44 @@ enum List[A]:
   def reverse(): List[A] = foldLeft[List[A]](Nil())((l, e) => e :: l)
 
   /** EXERCISES */
-  def zipRight: List[(A, Int)] = ???
+  def zipRight1: List[(A, Int)] =
+    def _zipRight(l: List[A], acc: Int): List[(A,Int)] = l match
+      case h :: t => (h,acc) :: _zipRight(t, acc + 1)
+      case _ => Nil()
+    _zipRight(this,0)
 
-  def partition(pred: A => Boolean): (List[A], List[A]) = ???
+  def zipRight2: List[(A,Int)] =
+    var list: List[(A,Int)] = Nil()
+    var i = 0
+    for e <- this do {list = (e,i) :: list; i = i+1}
+    list.reverse()
 
-  def span(pred: A => Boolean): (List[A], List[A]) = ???
+  def partition1(pred: A => Boolean): (List[A], List[A]) =
+    def negate(pred: A => Boolean): A => Boolean =
+      (x: A) => !pred(x)
+    (this.filter(pred),this.filter(negate(pred)))
+
+  def partition2(pred: A => Boolean): (List[A], List[A]) =
+    (filter(pred), filter(!pred(_)))
+
+  def span(pred: A => Boolean): (List[A], List[A]) =
+    def _head(l: List[A], pred: A => Boolean): List[A] = l match
+      case h :: t if pred(h) => h :: _head(t,pred)
+      case _ => Nil()
+    def _tail(l: List[A], pred: A => Boolean): List[A] = l match
+      case h :: t if pred(h) => _tail(t, pred)
+      case h :: t =>  h :: t
+      case _ => Nil()
+    (_head(this, pred), _tail(this, pred))
 
   /** @throws UnsupportedOperationException if the list is empty */
-  def reduce(op: (A, A) => A): A = ???
+  def reduce(op: (A, A) => A): A = this match
+    case h :: t if t != Nil() => op(h,t.reduce(op))
+    case h :: _ => h
+    case _ => throw new UnsupportedOperationException
 
-  def takeRight(n: Int): List[A] = ???
+  def takeRight(n: Int): List[A] =
+    this.reverse().zipRight1.filter(_._2 < n).map(_._1).reverse()
 
 // Factories
 object List:
@@ -83,8 +111,11 @@ object List:
 
 @main def checkBehaviour(): Unit =
   val reference = List(1, 2, 3, 4)
-  println(reference.zipRight) // List((1, 0), (2, 1), (3, 2), (4, 3))
-  println(reference.partition(_ % 2 == 0)) // (List(2, 4), List(1, 3))
+  //println(reference)
+  println(reference.zipRight1) // List((1, 0), (2, 1), (3, 2), (4, 3))
+  println(reference.zipRight2)
+  println(reference.partition1(_ % 2 == 0)) // (List(2, 4), List(1, 3))
+  println(reference.partition2(_ % 2 == 0))
   println(reference.span(_ % 2 != 0)) // (List(1), List(2, 3, 4))
   println(reference.span(_ < 3)) // (List(1, 2), List(3, 4))
   println(reference.reduce(_ + _)) // 10
